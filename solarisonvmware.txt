@@ -1,0 +1,49 @@
+Solaris on VMware Notes
+
+Oracle Solaris 11: https://drive.google.com/file/d/1zOC1PiW2J2lMag35V0DyYd4pNoKPchhQ/view?usp=drivesdk
+VMware 17 Pro: https://drive.google.com/file/d/1zOC1PiW2J2lMag35V0DyYd4pNoKPchhQ/view?usp=drivesdk
+Putty Terminal: https://drive.google.com/file/d/1zWYAp65GrlOCbBAkNiVUQDT5-boNcq0h/view?usp=drivesdk
+
+VMware License Key for PRO: MC60H-DWHD5-H80U9-6V85M-8280D
+
+After Installing VMware and Putty
+
+Insatall Solaris on VMware
+1. Open VMware
+2. Click Create new Virtual Machine, select typical
+3. Select Installer disc image file (iso), then click Brows button
+4. Select the Solaris ISO file that you download
+5. Follow the Wizard to complete the setup
+After that the terminal will open
+Select the Language and Keyboard type
+6. Select language, 27 for English
+7. Select keyboard, 3 for English
+Wait for few second
+8. Select 1 to install Solaris
+Then the guid for Installation of Solaris will appear click F2 to Continue
+9. Follow Installation guide and setups and the Solaris will be installed now
+10. After the Solaris Installation click F8 to Reboot
+11. After the reboot the Solaris will initailize now, you can login on root
+Sample
+login: root
+password: popol09
+Note: Click Ctrl + Alt to exit on VRware Virtual Machine
+
+
+Set up on VMware to connect on Putty
+After insatalling Putty and Solaris on VMware
+1. On solaris Command comand line put
+~#ipadm
+to show ip details
+2. Open Putty put the IP address on that display on command line on solaris
+3. Click Open, then login on root, once you login the error will display
+4. To resolve that go back to VMware solaris and put
+~#vi /etc/ssh/sshd_config
+find and edit the following
+PermitRootLogin no --> PermitRootLogin yes
+note press x means remove
+5. After editing click Ctrl : then click x then enter
+6. The put
+~#svcadm restart ssh
+~#svcadm restart network
+7. Open again the Putty and on the same IP address, login the root, you will now able to use the Putty as your terminal on Solaris that was installed on VMware
