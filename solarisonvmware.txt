@@ -41,9 +41,14 @@ to show ip details
 ~#vi /etc/ssh/sshd_config
 find and edit the following
 PermitRootLogin no --> PermitRootLogin yes
-note press x means remove
-5. After editing click Ctrl : then click x then enter
+note 
+	press x means remove
+	press i to insert
+5. After editing click "Ctrl :" then click x then enter
 6. The put
 ~#svcadm restart ssh
 ~#svcadm restart network
 7. Open again the Putty and on the same IP address, login the root, you will now able to use the Putty as your terminal on Solaris that was installed on VMware
+
+
+Full Lesson Here: https://www.infounix.com/course/solaris/intro-to-solaris
