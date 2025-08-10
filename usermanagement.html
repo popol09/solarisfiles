@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+</head>
+<body>
+<div class="container" style="max-width: 900px; margin: 2rem auto; padding: 2rem; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+    <header style="margin-bottom: 2rem;">
+        <h1 style="font-size: 2.5rem; color: #e53e3e; font-family: serif; text-align: center; font-weight: bold; margin-bottom: 0.5rem;">
+            User Management in Solaris
+        </h1>
+        <p style="font-family: Cambria, serif; font-size: 1.1rem; text-align: center;">
+            In Solaris, user management involves creating, modifying, and deleting user accounts, as well as managing user attributes.
+        </p>
+    </header>
+
+    <section style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.5rem; color: #e53e3e; font-family: serif; font-weight: bold; margin-bottom: 0.5rem;">
+            Important Files in User Management
+        </h2>
+        <p style="font-family: Cambria, serif;">Here are some important files in user management:</p>
+        <ul style="margin-left: 1.5rem;">
+            <li style="font-weight: bold;">/etc/passwd</li>
+            <li style="font-weight: bold;">/etc/shadow</li>
+        </ul>
+    </section>
+
+    <section style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.2rem; color: #4a5568; font-family: serif; font-weight: bold;">1. Get All User's Information</h2>
+        <div style="background: #222; color: #fff; font-family: monospace; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; overflow-x: auto;">
+            <pre style="margin: 0;">[root@localhost:~ ]# cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+landscape:x:104:105::/var/lib/landscape:/usr/sbin/nologin
+polkitd:x:990:990:User for polkitd:/:/usr/sbin/nologin
+test:x:1000:1000:,,,:/home/test:/bin/bash
+dnsmasq:x:999:65534:dnsmasq:/var/lib/misc:/usr/sbin/nologin
+john:x:1001:1002::/home/john:/bin/sh
+[root@localhost:~ ]#
+            </pre>
+        </div>
+        <p style="font-family: Cambria, serif;">The <code>/etc/passwd</code> file contains essential user information such as username, UID, GID, home directory, and shell.</p>
+    </section>
+
+    <section style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.2rem; color: #4a5568; font-family: serif; font-weight: bold;">2. Get All User's Information in Password Encrypted Form</h2>
+        <div style="background: #222; color: #fff; font-family: monospace; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; overflow-x: auto;">
+            <pre style="margin: 0;">[root@localhost:~ ]# cat /etc/shadow
+root:*:20094:0:99999:7:::
+daemon:*:20094:0:99999:7:::
+bin:*:20094:0:99999:7:::
+sys:*:20094:0:99999:7:::
+sync:*:20094:0:99999:7:::
+games:*:20094:0:99999:7:::
+test:$y$j9T$olK.GsTmFcuUPahYNiK4M.$rm28zZ9ZGYD9gq5eXctdnrgpVhzNwSBmNKIqlms6wD.:20126:0:99999:7:::
+dnsmasq:!:20130::::::
+john:!:20131:0:99999:7:::
+[root@localhost:~ ]#
+            </pre>
+        </div>
+        <p style="font-family: Cambria, serif;">The <code>/etc/shadow</code> file stores password information in an encrypted form, as well as the date of the last password change and password expiration details.</p>
+    </section>
+
+    <section style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.2rem; color: #4a5568; font-family: serif; font-weight: bold;">3. Check Password Policy Information</h2>
+        <div style="background: #222; color: #fff; font-family: monospace; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; overflow-x: auto;">
+            <pre style="margin: 0;">[root@localhost:~ ]# cat /etc/default/passwd
+# Copyright (c) 1989, 2014, Oracle and/or its affiliates. All rights reserved.
+# ...
+PASSLENGTH=6
+# ...
+            </pre>
+        </div>
+        <p style="font-family: Cambria, serif;">The <code>/etc/default/passwd</code> file contains settings related to password policies like password length and aging.</p>
+    </section>
+
+    <section style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.2rem; color: #4a5568; font-family: serif; font-weight: bold;">4. Get a Copy of Password Policy Information</h2>
+        <div style="background: #222; color: #fff; font-family: monospace; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; overflow-x: auto;">
+            <pre style="margin: 0;">[root@localhost:~]# cat /etc/opasswd
+root:x:0:0:Super-User:/root:/usr/bin/bash
+daemon:x:1:1::/:
+bin:x:2:2::/usr/bin:
+...
+[root@localhost:~]#
+            </pre>
+        </div>
+        <p style="font-family: Cambria, serif;">The <code>/etc/opasswd</code> file stores a backup copy of the <code>/etc/passwd</code> file to recover it if deleted by mistake.</p>
+    </section>
+
+    <section style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.2rem; color: #4a5568; font-family: serif; font-weight: bold;">5. Recover the Shadow File</h2>
+        <div style="background: #222; color: #fff; font-family: monospace; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; overflow-x: auto;">
+            <pre style="margin: 0;">[root@localhost:~]# rm -rf /etc/shadow
+[root@localhost:~]# pwconv
+[root@localhost:~]# ls /etc/shadow
+/etc/shadow
+[root@localhost:~]#
+            </pre>
+        </div>
+        <p style="font-family: Cambria, serif;">The <code>pwconv</code> command is used to recover the <code>/etc/shadow</code> file if it is lost.</p>
+        <p style="font-family: Cambria, serif;">After recovering the shadow file, reset the root password with <code>passwd root</code> command.</p>
+    </section>
+
+    <hr style="margin: 2rem 0; border: none; border-top: 2px solid #e2e8f0;">
+
+    <section>
+        <h2 style="font-size: 2rem; color: #e53e3e; font-family: serif; font-weight: bold; margin-bottom: 0.5rem;">
+            Common Commands for User Management in Solaris
+        </h2>
+        <p style="font-family: Cambria, serif;">Here are some common commands for managing users in Solaris:</p>
+        <div style="margin-top: 1.5rem;">
+            <ol style="font-family: Cambria, serif; padding-left: 1.5rem;">
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Creating a User:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# useradd john
+[root@localhost:~ ]# grep john /etc/passwd
+john:x:1001:1002::/home/john:/bin/sh
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>useradd</code> command creates a new user account. Replace <code>&lt;user_name&gt;</code> with the desired username.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Creating a User with Custom Info:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# useradd -u 1010 -g 1010 -c "new user" -m -d /home/john2 john
+[root@localhost:~ ]# grep john /etc/passwd
+john:x:1010:1010:new user:/home/john2:/bin/sh
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>useradd</code> command with additional options allows you to specify a custom user ID (<code>-u</code>), group ID (<code>-g</code>), comment (<code>-c</code>), home directory (<code>-d</code>), and create the user's home directory (<code>-m</code>).</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Modify the User Name:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# usermod -l dom john
+[root@localhost:~ ]# grep dom /etc/passwd
+dom:x:1010:1010:new user:/home/john2:/bin/sh
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>usermod -l</code> command changes the username of an existing account.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Modify the User ID:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# usermod -u 1020 dom
+[root@localhost:~ ]# grep dom /etc/passwd
+dom:x:1020:1010:new user:/home/john2:/bin/sh
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>usermod -u</code> command allows you to modify the user ID (UID) of an existing user.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Modify the User's Group:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# usermod -g 1020 dom
+[root@localhost:~ ]# grep dom /etc/passwd
+dom:x:1020:1020:new user:/home/john2:/bin/sh
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>usermod -g</code> command changes the user's primary group.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Modify the User's Comment:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# usermod -c "updated comment" dom
+[root@localhost:~ ]# grep dom /etc/passwd
+dom:x:1020:1020:updated comment:/home/john2:/bin/sh
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>usermod -c</code> command allows you to modify the comment field for the user, which typically contains the user's full name.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Modify the User's Home Directory:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# usermod -d /home/dom2 dom
+[root@localhost:~ ]# grep dom /etc/passwd
+dom:x:1020:1020:updated comment:/home/dom2:/bin/sh
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>usermod -d</code> command changes the user's home directory.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Modify the User's Shell:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# usermod -s /bin/bash dom
+[root@localhost:~ ]# grep dom /etc/passwd
+dom:x:1020:1020:updated comment:/home/dom2:/bin/bash
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>usermod -s</code> command changes the user's default shell.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Delete a User without Home Directory:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# userdel john
+[root@localhost:~ ]# ls -l /home | grep john
+drwxr-x--- 2 1001 1001 4096 Feb 13 04:04 john
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>userdel</code> command deletes a user account but keeps the user's home directory intact.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Delete a User along with Home Directory:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# userdel -r john
+[root@localhost:~ ]# ls -l /home | grep john
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>userdel -r</code> command removes both the user account and the associated home directory.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Set or Change a User's Password:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# passwd john
+New password:
+Retype new password:
+passwd: password updated successfully
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>passwd</code> command allows you to set or change the password of a user account.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Check User's Password Status:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# passwd -S john
+john P 2025-02-13 0 99999 7 -1
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>passwd -S</code> command checks the status of a user's password, such as whether it is locked or expired.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Lock a User Account:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# passwd -l john
+passwd: password changed.
+[root@localhost:~ ]# passwd -S john
+john L 2025-02-13 0 99999 7 -1
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>passwd -l</code> command locks the specified user account, preventing the user from logging in.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Unlock a User Account:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# passwd -u john
+passwd: password changed.
+[root@localhost:~ ]# passwd -S john
+john P 2025-02-13 0 99999 7 -1
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>passwd -u</code> command unlocks a previously locked user account.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Delete the Password of a User:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# passwd -d john
+passwd: password changed.
+[root@localhost:~ ]# passwd -S john
+john NP 2025-02-13 0 99999 7 -1
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>passwd -d</code> command removes the password of a user, allowing login without a password (not recommended for regular use).</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Get User Information:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# id john
+uid=1001(john) gid=1001(john) groups=1001(john)
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>id</code> command provides information about the user, including UID, GID, and groups.</span>
+                </li>
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>Get User Information along with Secondary Groups:</strong>
+                    <div style="background: #222; color: #fff; font-family: monospace; padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem;">
+                        <pre style="margin: 0;">[root@localhost:~ ]# id -a john
+uid=1001(john) gid=1001(john) groups=1001(john),10(uucp)
+                        </pre>
+                    </div>
+                    <span style="font-size: 0.95rem;">The <code>id -a</code> command shows detailed user information, including all groups the user belongs to (primary and secondary).</span>
+                </li>
+            </ol>
+        </div>
+    </section>
+</div></header></div>
+</body>
+</html>
